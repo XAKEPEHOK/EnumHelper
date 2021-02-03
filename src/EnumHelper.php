@@ -30,9 +30,14 @@ abstract class EnumHelper
             $caseConvert = static::caseConvertCallback();
         }
 
-        $diff = array_diff(static::values(), array_keys($switchCaseOrCallbacks));
-        if (!empty($diff)) {
-            throw new ForgottenSwitchCaseException(implode(", ", $diff));
+        $diffNotExists = array_diff(static::values(), array_keys($switchCaseOrCallbacks));
+        if (!empty($diffNotExists)) {
+            throw new ForgottenSwitchCaseException(implode(", ", $diffNotExists), 1);
+        }
+
+        $diffRedundant = array_diff(array_keys($switchCaseOrCallbacks), static::values());
+        if (!empty($diffRedundant)) {
+            throw new ForgottenSwitchCaseException(implode(", ", $diffRedundant), 2);
         }
 
         $caseConverted = $caseConvert($case);
@@ -58,9 +63,15 @@ abstract class EnumHelper
                 return $key;
             };
         }
-        $diff = array_diff(static::values(), array_keys($array));
-        if (!empty($diff)) {
-            throw new NotEqualsAssociationException(implode(", ", $diff));
+
+        $diffNotExists = array_diff(static::values(), array_keys($array));
+        if (!empty($diffNotExists)) {
+            throw new NotEqualsAssociationException(implode(", ", $diffNotExists), 1);
+        }
+
+        $diffRedundant = array_diff(array_keys($array), static::values());
+        if (!empty($diffRedundant)) {
+            throw new NotEqualsAssociationException(implode(", ", $diffRedundant), 2);
         }
 
         $result = [];
