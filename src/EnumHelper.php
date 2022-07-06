@@ -7,6 +7,7 @@
 namespace XAKEPEHOK\EnumHelper;
 
 
+use Exception;
 use XAKEPEHOK\EnumHelper\Exception\ForgottenSwitchCaseException;
 use XAKEPEHOK\EnumHelper\Exception\NotEqualsAssociationException;
 use XAKEPEHOK\EnumHelper\Exception\OutOfEnumException;
@@ -96,12 +97,13 @@ abstract class EnumHelper
 
     /**
      * @param $value
+     * @param Exception|null $exception
      * @throws OutOfEnumException
      */
-    public static function guardValidValue($value)
+    public static function guardValidValue($value, Exception $exception = null)
     {
         if (!static::isValid($value)) {
-            throw new OutOfEnumException("Value '{$value}' is not in enum list of class " . static::class);
+            throw $exception ?? new OutOfEnumException("Value '{$value}' is not in enum list of class " . static::class);
         }
     }
 
