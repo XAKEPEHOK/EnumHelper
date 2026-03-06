@@ -44,7 +44,8 @@ abstract class EnumHelper
         $caseConverted = $caseConvert($case);
         foreach ($switchCaseOrCallbacks as $key => $callbackOrValue) {
             if ($key == $caseConverted) {
-                return is_callable($callbackOrValue) ? $callbackOrValue($case) : $callbackOrValue;
+                $isCallback = is_callable($callbackOrValue) && !is_string($callbackOrValue);
+                return $isCallback ? $callbackOrValue($case) : $callbackOrValue;
             }
         }
 
